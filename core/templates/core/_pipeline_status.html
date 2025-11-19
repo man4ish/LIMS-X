@@ -1,0 +1,6 @@
+<h3>Pipeline Status</h3>
+<ul>
+  {% for run in sample.pipeline_runs.all %}
+    <li>{{ run.pipeline_name }}: {{ run.status }}</li>
+  {% endfor %}
+</ul>
