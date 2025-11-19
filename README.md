@@ -1,4 +1,4 @@
-# LIMS-X (Under development)
+# LIMS-X
 
 A lightweight Laboratory Information Management System (LIMS) built with Django to manage biological sample data, projects, and associated metadata.
 
