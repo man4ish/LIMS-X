@@ -1,40 +1,20 @@
 #!/bin/bash
 
-# LIMS-X: Robust Docker start script
-# Stops old containers, rebuilds images, waits for MySQL, starts web, loads DB, and runs migrations.
+# Activate virtual environment
+source venv_sys/bin/activate
 
-set -e  # Exit on any error
+# Kill any process using Django's default port (8000)
+PORT=8000
+if lsof -i :$PORT > /dev/null
+then
+    echo "Port $PORT is in use. Killing the process..."
+    PID=$(lsof -t -i :$PORT)
+    kill -9 $PID
+    echo "Killed process $PID on port $PORT"
+fi
 
-echo "Stopping any existing containers..."
-docker compose down
+# Start Celery worker in background (logs to celery.log)
+celery -A lab_data_manager worker --loglevel=info >> celery.log 2>&1 &
 
-echo "Rebuilding Docker images..."
-docker compose build --no-cache
-
-echo "Starting MySQL container..."
-docker compose up -d db
-
-echo "Waiting for MySQL to be fully ready..."
-until docker compose exec db mysqladmin ping -h db -uroot -proot --silent; do
-    echo "Waiting for MySQL..."
-    sleep 2
-done
-echo "MySQL is ready!"
-
-echo "Starting web container..."
-docker compose up -d web
-
-# Give web container a few seconds to initialize
-sleep 5
-
-echo "Loading database dump..."
-docker compose exec web sh -c "mysql -h db -u root -proot limsdb < /app/limsdb_dump.sql"
-
-echo "Running Django migrations..."
-docker compose exec web python manage.py migrate
-
-echo "Collecting static files..."
-docker compose exec web python manage.py collectstatic --noinput
-
-echo "LIMS-X is up and running!"
-echo "Access the app at: http://127.0.0.1:8000"
+# Start Django development server
+python manage.py runserver $PORT
