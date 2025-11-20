@@ -1,7 +1,7 @@
 services:
   web:
     build: .
-    command: gunicorn --bind 0.0.0.0:8000 lab_data_manager.wsgi:application
+    command: gunicorn --bind 0.0.0.0:8000 LIMS-X.wsgi:application
     volumes:
       - .:/app
     ports:

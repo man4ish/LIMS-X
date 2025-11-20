@@ -34,6 +34,9 @@ urlpatterns = [
     path("accounts/login/", auth_views.LoginView.as_view(template_name='registration/login.html'), name="login"),
     path("accounts/logout/", auth_views.LogoutView.as_view(), name="logout"),
 
+    # Core app REST API
+    path('api/', include('core.api_urls')),
+
     # Core app URLs
     path('core/', include('core.urls', namespace='core')),
 

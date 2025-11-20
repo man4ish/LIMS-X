@@ -385,3 +385,13 @@ class AnalysisOutput(models.Model):
 
     def __str__(self):
         return f"Output {self.id} (Primary: {self.is_primary})"
+
+class PipelineRun(models.Model):
+    sample = models.ForeignKey('Sample', on_delete=models.CASCADE)
+    pipeline_name = models.CharField(max_length=255)
+    status = models.CharField(max_length=50, default="pending")
+    started_at = models.DateTimeField(auto_now_add=True)
+    finished_at = models.DateTimeField(null=True, blank=True)
+
+    def __str__(self):
+        return f"{self.pipeline_name} for Sample {self.sample.id} ({self.status})"

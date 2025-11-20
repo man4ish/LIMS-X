@@ -1,23 +1,40 @@
-#!/bin/zsh
+#!/bin/bash
 
-PORT=8000
+# LIMS-X: Robust Docker start script
+# Stops old containers, rebuilds images, waits for MySQL, starts web, loads DB, and runs migrations.
 
-# Kill any process using the port
-PIDS=$(lsof -i :$PORT | awk 'NR != 1 {print $2}' | sort -u)
+set -e  # Exit on any error
 
-if [[ -z "$PIDS" ]]; then
-  echo "No process found using port $PORT."
-else
-  echo "Killing processes on port $PORT: $PIDS"
-  echo "$PIDS" | xargs kill -9
-  echo "Done."
-fi
+echo "Stopping any existing containers..."
+docker compose down
 
-# Make migrations (detect changes and create migration files if needed)
-python3 manage.py makemigrations
+echo "Rebuilding Docker images..."
+docker compose build --no-cache
 
-# Apply migrations to the database
-python3 manage.py migrate
+echo "Starting MySQL container..."
+docker compose up -d db
 
-# Start the Django development server
-python3 manage.py runserver
+echo "Waiting for MySQL to be fully ready..."
+until docker compose exec db mysqladmin ping -h db -uroot -proot --silent; do
+    echo "Waiting for MySQL..."
+    sleep 2
+done
+echo "MySQL is ready!"
+
+echo "Starting web container..."
+docker compose up -d web
+
+# Give web container a few seconds to initialize
+sleep 5
+
+echo "Loading database dump..."
+docker compose exec web sh -c "mysql -h db -u root -proot limsdb < /app/limsdb_dump.sql"
+
+echo "Running Django migrations..."
+docker compose exec web python manage.py migrate
+
+echo "Collecting static files..."
+docker compose exec web python manage.py collectstatic --noinput
+
+echo "LIMS-X is up and running!"
+echo "Access the app at: http://127.0.0.1:8000"
