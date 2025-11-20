@@ -19,6 +19,13 @@ from django.contrib import admin
 from django.urls import path, include
 from django.contrib.auth import views as auth_views
 from django.views.generic import RedirectView
+from django.urls import path, re_path, include
+from django.views.static import serve
+from django.contrib import admin
+from django.urls import path, re_path, include
+from django.views.static import serve
+from django.conf import settings
+from django.views.generic import RedirectView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -27,9 +34,17 @@ urlpatterns = [
     path("accounts/login/", auth_views.LoginView.as_view(template_name='registration/login.html'), name="login"),
     path("accounts/logout/", auth_views.LogoutView.as_view(), name="logout"),
 
+    # Core app REST API
+    path('api/', include('core.api_urls')),
+
     # Core app URLs
     path('core/', include('core.urls', namespace='core')),
 
     # Redirect root URL to core home
     path('', RedirectView.as_view(url='/core/', permanent=False)),
+    
+]
+
+urlpatterns += [
+    re_path(r'^favicon\.ico$', serve, {'path': 'favicon.ico', 'document_root': settings.STATIC_ROOT}),
 ]

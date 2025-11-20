@@ -1,23 +1,20 @@
-#!/bin/zsh
+#!/bin/bash
 
+# Activate virtual environment
+source venv_sys/bin/activate
+
+# Kill any process using Django's default port (8000)
 PORT=8000
-
-# Kill any process using the port
-PIDS=$(lsof -i :$PORT | awk 'NR != 1 {print $2}' | sort -u)
-
-if [[ -z "$PIDS" ]]; then
-  echo "No process found using port $PORT."
-else
-  echo "Killing processes on port $PORT: $PIDS"
-  echo "$PIDS" | xargs kill -9
-  echo "Done."
+if lsof -i :$PORT > /dev/null
+then
+    echo "Port $PORT is in use. Killing the process..."
+    PID=$(lsof -t -i :$PORT)
+    kill -9 $PID
+    echo "Killed process $PID on port $PORT"
 fi
 
-# Make migrations (detect changes and create migration files if needed)
-python3 manage.py makemigrations
+# Start Celery worker in background (logs to celery.log)
+celery -A lab_data_manager worker --loglevel=info >> celery.log 2>&1 &
 
-# Apply migrations to the database
-python3 manage.py migrate
-
-# Start the Django development server
-python3 manage.py runserver
+# Start Django development server
+python manage.py runserver $PORT

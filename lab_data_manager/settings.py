@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 
 from pathlib import Path
 import os
+import socket
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -40,6 +41,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "core",
     'django_extensions',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
@@ -76,16 +78,41 @@ WSGI_APPLICATION = "lab_data_manager.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql', # Keep this as mysql
-        'NAME': os.environ.get('MYSQL_DATABASE', 'limsdb'), # Default 'limsdb' if not set in .env
-        'USER': os.environ.get('MYSQL_USER', 'root'), # Default 'root' if not set in .env
-        'PASSWORD': os.environ.get('MYSQL_PASSWORD', 'root'), # Default 'root' if not set in .env
-        'HOST': os.environ.get('MYSQL_HOST', 'localhost'), # 'db' when using Docker Compose, 'localhost' for local
-        'PORT': os.environ.get('MYSQL_PORT', '3306'), # Default '3306' if not set in .env
+import os
+import socket
+
+def can_connect(host, port=3306, timeout=1):
+    try:
+        socket.create_connection((host, int(port)), timeout=timeout)
+        return True
+    except OSError:
+        return False
+
+local_host = os.environ.get('MYSQL_HOST', 'localhost')
+local_port = os.environ.get('MYSQL_PORT', '3306')
+
+if can_connect(local_host, local_port):
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.mysql',
+            'NAME': os.environ.get('MYSQL_DATABASE', 'limsdb'),
+            'USER': os.environ.get('MYSQL_USER', 'root'),
+            'PASSWORD': os.environ.get('MYSQL_PASSWORD', 'root'),
+            'HOST': local_host,
+            'PORT': local_port,
+        }
     }
-}
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.mysql',
+            'NAME': os.environ.get('MYSQL_DATABASE', 'limsdb'),
+            'USER': os.environ.get('MYSQL_USER', 'admin'),          # RDS user, override if needed
+            'PASSWORD': os.environ.get('RDS_DB_PASSWORD', ''),      # Put your RDS password in env var
+            'HOST': 'limsdb-instance.cc10204ym7q1.us-east-1.rds.amazonaws.com',
+            'PORT': '3306',
+        }
+    }
 
 # Add this if you haven't already, for general app settings
 SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'your-very-insecure-default-key-for-development-only')
@@ -128,6 +155,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
 STATIC_URL = "static/"
+STATICFILES_DIRS = [BASE_DIR / "static"]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
@@ -138,3 +166,11 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 LOGIN_REDIRECT_URL = '/core/'
 LOGOUT_REDIRECT_URL = '/accounts/login/'
+
+import os
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+CELERY_BROKER_URL = 'redis://localhost:6379/0'
+CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'

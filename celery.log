@@ -1,0 +1,182 @@
+ 
+ -------------- celery@spark-70f0 v5.5.3 (immunity)
+--- ***** ----- 
+-- ******* ---- Linux-6.11.0-1016-nvidia-aarch64-with-glibc2.39 2025-11-20 07:02:54
+- *** --- * --- 
+- ** ---------- [config]
+- ** ---------- .> app:         lab_data_manager:0xf078fc60b710
+- ** ---------- .> transport:   redis://localhost:6379/0
+- ** ---------- .> results:     redis://localhost:6379/0
+- *** --- * --- .> concurrency: 20 (prefork)
+-- ******* ---- .> task events: OFF (enable -E to monitor tasks in this worker)
+--- ***** ----- 
+ -------------- [queues]
+                .> celery           exchange=celery(direct) key=celery
+                
+
+[tasks]
+  . core.tasks.trigger_nextflow_pipeline
+
+[2025-11-20 07:02:54,936: INFO/MainProcess] Connected to redis://localhost:6379/0
+[2025-11-20 07:02:54,937: INFO/MainProcess] mingle: searching for neighbors
+[2025-11-20 07:02:55,940: INFO/MainProcess] mingle: all alone
+[2025-11-20 07:02:55,943: INFO/MainProcess] celery@spark-70f0 ready.
+
+Restarting celery worker (/home/manish/Desktop/machine/LIMS-X/venv_sys/bin/celery -A lab_data_manager worker --loglevel=info)
+ 
+ -------------- celery@spark-70f0 v5.5.3 (immunity)
+--- ***** ----- 
+-- ******* ---- Linux-6.11.0-1016-nvidia-aarch64-with-glibc2.39 2025-11-20 07:02:59
+- *** --- * --- 
+- ** ---------- [config]
+- ** ---------- .> app:         lab_data_manager:0xe7532275a840
+- ** ---------- .> transport:   redis://localhost:6379/0
+- ** ---------- .> results:     redis://localhost:6379/0
+- *** --- * --- .> concurrency: 20 (prefork)
+-- ******* ---- .> task events: OFF (enable -E to monitor tasks in this worker)
+--- ***** ----- 
+ -------------- [queues]
+                .> celery           exchange=celery(direct) key=celery
+                
+
+[tasks]
+  . core.tasks.trigger_nextflow_pipeline
+
+[2025-11-20 07:03:00,065: INFO/MainProcess] Connected to redis://localhost:6379/0
+[2025-11-20 07:03:00,067: INFO/MainProcess] mingle: searching for neighbors
+[2025-11-20 07:03:01,071: INFO/MainProcess] mingle: all alone
+[2025-11-20 07:03:01,076: INFO/MainProcess] celery@spark-70f0 ready.
+Traceback (most recent call last):
+  File "/home/manish/miniconda3/lib/python3.13/site-packages/django/db/backends/mysql/base.py", line 16, in <module>
+    import MySQLdb as Database
+  File "/home/manish/miniconda3/lib/python3.13/site-packages/MySQLdb/__init__.py", line 17, in <module>
+    from . import _mysql
+ImportError: /home/manish/miniconda3/bin/../lib/libstdc++.so.6: version `GLIBCXX_3.4.32' not found (required by /lib/aarch64-linux-gnu/libmysqlclient.so.21)
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/manish/miniconda3/bin/celery", line 7, in <module>
+    sys.exit(main())
+             ~~~~^^
+  File "/home/manish/miniconda3/lib/python3.13/site-packages/celery/__main__.py", line 15, in main
+    sys.exit(_main())
+             ~~~~~^^
+  File "/home/manish/miniconda3/lib/python3.13/site-packages/celery/bin/celery.py", line 231, in main
+    return celery(auto_envvar_prefix="CELERY")
+  File "/home/manish/miniconda3/lib/python3.13/site-packages/click/core.py", line 1485, in __call__
+    return self.main(*args, **kwargs)
+           ~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/home/manish/miniconda3/lib/python3.13/site-packages/click/core.py", line 1406, in main
+    rv = self.invoke(ctx)
+  File "/home/manish/miniconda3/lib/python3.13/site-packages/click/core.py", line 1873, in invoke
+    return _process_result(sub_ctx.command.invoke(sub_ctx))
+                           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/home/manish/miniconda3/lib/python3.13/site-packages/click/core.py", line 1269, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+           ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/manish/miniconda3/lib/python3.13/site-packages/click/core.py", line 824, in invoke
+    return callback(*args, **kwargs)
+  File "/home/manish/miniconda3/lib/python3.13/site-packages/click/decorators.py", line 34, in new_func
+    return f(get_current_context(), *args, **kwargs)
+  File "/home/manish/miniconda3/lib/python3.13/site-packages/celery/bin/base.py", line 135, in caller
+    return f(ctx, *args, **kwargs)
+  File "/home/manish/miniconda3/lib/python3.13/site-packages/celery/bin/worker.py", line 348, in worker
+    worker = app.Worker(
+        hostname=hostname, pool_cls=pool_cls, loglevel=loglevel,
+    ...<4 lines>...
+        quiet=ctx.obj.quiet,
+        **kwargs)
+  File "/home/manish/miniconda3/lib/python3.13/site-packages/celery/worker/worker.py", line 94, in __init__
+    self.app.loader.init_worker()
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/home/manish/miniconda3/lib/python3.13/site-packages/celery/loaders/base.py", line 110, in init_worker
+    self.import_default_modules()
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/home/manish/miniconda3/lib/python3.13/site-packages/celery/loaders/base.py", line 104, in import_default_modules
+    raise response
+  File "/home/manish/miniconda3/lib/python3.13/site-packages/celery/utils/dispatch/signal.py", line 280, in send
+    response = receiver(signal=self, sender=sender, **named)
+  File "/home/manish/miniconda3/lib/python3.13/site-packages/celery/fixups/django.py", line 101, in on_import_modules
+    self.worker_fixup.validate_models()
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/home/manish/miniconda3/lib/python3.13/site-packages/celery/fixups/django.py", line 139, in validate_models
+    self.django_setup()
+    ~~~~~~~~~~~~~~~~~^^
+  File "/home/manish/miniconda3/lib/python3.13/site-packages/celery/fixups/django.py", line 135, in django_setup
+    django.setup()
+    ~~~~~~~~~~~~^^
+  File "/home/manish/miniconda3/lib/python3.13/site-packages/django/__init__.py", line 24, in setup
+    apps.populate(settings.INSTALLED_APPS)
+    ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/manish/miniconda3/lib/python3.13/site-packages/django/apps/registry.py", line 116, in populate
+    app_config.import_models()
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/home/manish/miniconda3/lib/python3.13/site-packages/django/apps/config.py", line 269, in import_models
+    self.models_module = import_module(models_module_name)
+                         ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+  File "/home/manish/miniconda3/lib/python3.13/importlib/__init__.py", line 88, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen importlib._bootstrap>", line 1387, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1360, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1331, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 935, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 1027, in exec_module
+  File "<frozen importlib._bootstrap>", line 488, in _call_with_frames_removed
+  File "/home/manish/miniconda3/lib/python3.13/site-packages/django/contrib/auth/models.py", line 5, in <module>
+    from django.contrib.auth.base_user import AbstractBaseUser, BaseUserManager
+  File "/home/manish/miniconda3/lib/python3.13/site-packages/django/contrib/auth/base_user.py", line 43, in <module>
+    class AbstractBaseUser(models.Model):
+    ...<123 lines>...
+            )
+  File "/home/manish/miniconda3/lib/python3.13/site-packages/django/db/models/base.py", line 145, in __new__
+    new_class.add_to_class("_meta", Options(meta, app_label))
+    ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/manish/miniconda3/lib/python3.13/site-packages/django/db/models/base.py", line 373, in add_to_class
+    value.contribute_to_class(cls, name)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^
+  File "/home/manish/miniconda3/lib/python3.13/site-packages/django/db/models/options.py", line 238, in contribute_to_class
+    self.db_table, connection.ops.max_name_length()
+                   ^^^^^^^^^^^^^^
+  File "/home/manish/miniconda3/lib/python3.13/site-packages/django/utils/connection.py", line 15, in __getattr__
+    return getattr(self._connections[self._alias], item)
+                   ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "/home/manish/miniconda3/lib/python3.13/site-packages/django/utils/connection.py", line 62, in __getitem__
+    conn = self.create_connection(alias)
+  File "/home/manish/miniconda3/lib/python3.13/site-packages/django/db/utils.py", line 193, in create_connection
+    backend = load_backend(db["ENGINE"])
+  File "/home/manish/miniconda3/lib/python3.13/site-packages/django/db/utils.py", line 113, in load_backend
+    return import_module("%s.base" % backend_name)
+  File "/home/manish/miniconda3/lib/python3.13/importlib/__init__.py", line 88, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/manish/miniconda3/lib/python3.13/site-packages/django/db/backends/mysql/base.py", line 18, in <module>
+    raise ImproperlyConfigured(
+        "Error loading MySQLdb module.\nDid you install mysqlclient?"
+    ) from err
+django.core.exceptions.ImproperlyConfigured: Error loading MySQLdb module.
+Did you install mysqlclient?
+ 
+ -------------- celery@spark-70f0 v5.5.3 (immunity)
+--- ***** ----- 
+-- ******* ---- Linux-6.11.0-1016-nvidia-aarch64-with-glibc2.39 2025-11-20 07:04:21
+- *** --- * --- 
+- ** ---------- [config]
+- ** ---------- .> app:         lab_data_manager:0xf44aad071ac0
+- ** ---------- .> transport:   redis://localhost:6379/0
+- ** ---------- .> results:     redis://localhost:6379/0
+- *** --- * --- .> concurrency: 20 (prefork)
+-- ******* ---- .> task events: OFF (enable -E to monitor tasks in this worker)
+--- ***** ----- 
+ -------------- [queues]
+                .> celery           exchange=celery(direct) key=celery
+                
+
+[tasks]
+  . core.tasks.trigger_nextflow_pipeline
+
+[2025-11-20 07:04:22,216: INFO/MainProcess] Connected to redis://localhost:6379/0
+[2025-11-20 07:04:22,217: INFO/MainProcess] mingle: searching for neighbors
+[2025-11-20 07:04:23,222: INFO/MainProcess] mingle: all alone
+[2025-11-20 07:04:23,229: INFO/MainProcess] celery@spark-70f0 ready.
