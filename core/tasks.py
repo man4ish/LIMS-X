@@ -1,22 +1,20 @@
-from celery import shared_task
-import subprocess
-from core.models import PipelineRun, Sample
-from django.utils import timezone
+# from django.db.models.signals import post_save
+# from django.dispatch import receiver
+# from core.models import Sample
+# from core.tasks import trigger_nextflow_pipeline
+# from core.pipelines import PIPELINE_MAPPING
 
-@shared_task
-def trigger_nextflow_pipeline(sample_id, pipeline_name):
-    sample = Sample.objects.get(id=sample_id)
-    run = PipelineRun.objects.create(
-        sample=sample,
-        pipeline_name=pipeline_name,
-        status="running"
-    )
-    try:
-        cmd = f"nextflow run /path/to/{pipeline_name} --sample_id {sample.id}"
-        subprocess.run(cmd, shell=True, check=True)
-        run.status = "completed"
-    except subprocess.CalledProcessError:
-        run.status = "failed"
-    finally:
-        run.finished_at = timezone.now()
-        run.save()
+# @receiver(post_save, sender=Sample)
+# def run_pipelines_on_sample_submission(sender, instance, created, **kwargs):
+#     if created:
+#         sequence_type = getattr(instance.sample_type, 'name', None)
+#         project = getattr(instance.project, 'label', None)
+#         # library_type can be added later if needed
+#
+#         pipelines_to_run = PIPELINE_MAPPING.get(
+#             (sequence_type, None, project),
+#             ["qc_pipeline.nf"]
+#         )
+#
+#         for pipeline in pipelines_to_run:
+#             trigger_nextflow_pipeline.delay(instance.id, pipeline)
