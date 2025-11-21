@@ -19,6 +19,7 @@ django-filter==25.2
 django-simple-history==3.10.1
 django-timezone-field==7.1
 djangorestframework==3.16.1
+djangorestframework_simplejwt==5.5.1
 drf-yasg==1.21.11
 executing==2.2.1
 graphviz==0.21
@@ -48,6 +49,7 @@ ptyprocess==0.7.0
 pure_eval==0.2.3
 pydot==4.0.1
 Pygments==2.19.2
+PyJWT==2.10.1
 pyparsing==3.2.5
 pytest==9.0.1
 pytest-django==4.11.1
@@ -56,6 +58,7 @@ python-dateutil==2.9.0.post0
 pytokens==0.3.0
 pytz==2025.2
 PyYAML==6.0.3
+redis==4.6.0
 six==1.17.0
 sqlparse==0.5.3
 stack-data==0.6.3

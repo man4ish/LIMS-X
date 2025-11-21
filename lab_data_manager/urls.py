@@ -16,35 +16,47 @@ Including another URLconf
 """
 
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import path, re_path, include
 from django.contrib.auth import views as auth_views
 from django.views.generic import RedirectView
-from django.urls import path, re_path, include
-from django.views.static import serve
-from django.contrib import admin
-from django.urls import path, re_path, include
 from django.views.static import serve
 from django.conf import settings
-from django.views.generic import RedirectView
+from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 urlpatterns = [
+    # Admin panel
     path('admin/', admin.site.urls),
 
-    # Auth URLs
-    path("accounts/login/", auth_views.LoginView.as_view(template_name='registration/login.html'), name="login"),
-    path("accounts/logout/", auth_views.LogoutView.as_view(), name="logout"),
+    # Web authentication (session-based)
+    path(
+        'accounts/login/',
+        auth_views.LoginView.as_view(template_name='registration/login.html'),
+        name='login'
+    ),
+    path(
+        'accounts/logout/',
+        auth_views.LogoutView.as_view(),
+        name='logout'
+    ),
 
-    # Core app REST API
+    # JWT Authentication for REST API
+    path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+
+    # Core app REST API endpoints
     path('api/', include('core.api_urls')),
 
-    # Core app URLs
-    path('core/', include('core.urls', namespace='core')),
+    # Core app web URLs
+    path('core/', include(('core.urls', 'core'), namespace='core')),
 
     # Redirect root URL to core home
     path('', RedirectView.as_view(url='/core/', permanent=False)),
-    
-]
 
-urlpatterns += [
+    # Favicon
     re_path(r'^favicon\.ico$', serve, {'path': 'favicon.ico', 'document_root': settings.STATIC_ROOT}),
 ]
+
+# Optional: static files serving (if not using production server)
+# from django.conf.urls.static import static
+# urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+
