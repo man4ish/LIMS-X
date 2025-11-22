@@ -399,3 +399,31 @@ the celery worker `-n` option.
 
 [2025-11-21 04:55:25,406: INFO/MainProcess] mingle: all alone
 [2025-11-21 04:55:25,413: INFO/MainProcess] celery@spark-70f0 ready.
+ 
+ -------------- celery@spark-70f0 v5.5.3 (immunity)
+--- ***** ----- 
+-- ******* ---- Linux-6.11.0-1016-nvidia-aarch64-with-glibc2.39 2025-11-22 03:41:47
+- *** --- * --- 
+- ** ---------- [config]
+- ** ---------- .> app:         lab_data_manager:0xe991a83a77d0
+- ** ---------- .> transport:   redis://localhost:6379/0
+- ** ---------- .> results:     redis://localhost:6379/0
+- *** --- * --- .> concurrency: 20 (prefork)
+-- ******* ---- .> task events: OFF (enable -E to monitor tasks in this worker)
+--- ***** ----- 
+ -------------- [queues]
+                .> celery           exchange=celery(direct) key=celery
+                
+
+[tasks]
+
+
+[2025-11-22 03:41:47,926: INFO/MainProcess] Connected to redis://localhost:6379/0
+[2025-11-22 03:41:47,927: INFO/MainProcess] mingle: searching for neighbors
+[2025-11-22 03:41:48,935: WARNING/MainProcess] /home/manish/Desktop/machine/LIMS-X/venv_sys/lib/python3.12/site-packages/celery/app/control.py:56: DuplicateNodenameWarning: Received multiple replies from node name: celery@spark-70f0.
+Please make sure you give each node a unique nodename using
+the celery worker `-n` option.
+  warnings.warn(DuplicateNodenameWarning(
+
+[2025-11-22 03:41:48,935: INFO/MainProcess] mingle: all alone
+[2025-11-22 03:41:48,940: INFO/MainProcess] celery@spark-70f0 ready.
