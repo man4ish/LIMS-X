@@ -13,10 +13,13 @@ class SampleAuditLog(models.Model):
 
     sample = models.ForeignKey(
         Sample,
-        on_delete=models.CASCADE,
-        related_name="audit_logs",  # For reverse lookup: sample.audit_logs.all()
-        db_index=True                # Faster filtering in queries
+        on_delete=models.SET_NULL,       # keep logs even if sample is deleted
+        null=True,                       # allow null since sample will be gone
+        blank=True,
+        related_name="audit_logs",       # For reverse lookup: sample.audit_logs.all()
+        db_index=True
     )
+
     action = models.CharField(
         max_length=10,
         choices=ACTIONS,
