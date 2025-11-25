@@ -6,6 +6,8 @@ A lightweight Laboratory Information Management System (LIMS) built with Django 
 
 **LIMS-X** is designed to help research teams track, organize, and search biological samples in a structured, user-friendly interface. It supports core LIMS features such as sample submission, metadata tracking, and secure access.
 
+![LIMS-X Architecture Diagram](https://raw.githubusercontent.com/man4ish/LIMS-X/feature/metadata-versioning/images/LIMS-X_Architecture.png)
+
 ## Features
 
 * Sample submission form with validation
